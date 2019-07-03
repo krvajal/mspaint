@@ -23,7 +23,7 @@ function canvasReducer(state, action) {
   }
 }
 
-const Canvas = ({ width, height }) => {
+const Canvas = ({ width, height }, forwardedRef) => {
   const [state, dispatch] = React.useReducer(canvasReducer, {
     drawing: false
   });
@@ -42,7 +42,10 @@ const Canvas = ({ width, height }) => {
 
   return (
     <canvas
-      ref={canvasRef}
+      ref={ref => {
+        canvasRef.current = ref;
+        forwardedRef.current = ref;
+      }}
       width={width}
       height={height}
       style={styles.canvas}
@@ -100,4 +103,4 @@ const styles = {
   }
 };
 
-export default React.memo(Canvas);
+export default React.memo(React.forwardRef(Canvas));

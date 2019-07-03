@@ -1,5 +1,6 @@
 import React from "react";
 import Canvas from "./Canvas";
+import Anchor from "./Anchor";
 import { getRelativeCoordinates } from "../utils";
 
 const initialDim = {
@@ -12,19 +13,19 @@ function canvasReducer(state, action) {
     case "RESIZE_START_X": {
       return {
         ...state,
-        resizing: "x"
+        resizing: "east"
       };
     }
     case "RESIZE_START_Y": {
       return {
         ...state,
-        resizing: "y"
+        resizing: "south"
       };
     }
     case "RESIZE_START_XY": {
       return {
         ...state,
-        resizing: "xy"
+        resizing: "southeast"
       };
     }
     case "RESIZE_CHANGE_SIZE": {
@@ -33,10 +34,10 @@ function canvasReducer(state, action) {
       if (state.resizing === "idle") {
         return newState;
       }
-      if (state.resizing.includes("x")) {
+      if (state.resizing.includes("east")) {
         newState.desiredDim.width = action.x;
       }
-      if (state.resizing.includes("y")) {
+      if (state.resizing.includes("south")) {
         newState.desiredDim.height = action.y;
       }
       return newState;
@@ -58,13 +59,6 @@ function canvasReducer(state, action) {
   }
 }
 
-const axisToCursorMap = {
-  x: "ew-resize",
-  y: "ns-resize",
-  xy: "nwse-resize",
-  idle: "default"
-};
-
 const minX = 10;
 const minY = 10;
 
@@ -82,8 +76,8 @@ const CanvasContainer = () => {
   });
 
   const canvasContainerRef = React.useRef();
-
-  const { resizing, currentDim, desiredDim } = state;
+  const canvasRef = React.useRef();
+  const { currentDim, desiredDim } = state;
 
   const handleResize = React.useCallback(
     evt => {
@@ -102,14 +96,14 @@ const CanvasContainer = () => {
   }, []);
 
   return (
-    <div
-      ref={canvasContainerRef}
-      style={{ ...styles.canvasFrame, cursor: axisToCursorMap[resizing] }}
-    >
-      <Canvas width={currentDim.width} height={currentDim.height} />
+    <div ref={canvasContainerRef} style={{ ...styles.canvasFrame }}>
+      <Canvas
+        width={currentDim.width}
+        height={currentDim.height}
+        ref={canvasRef}
+      />
       <Anchor
-        axis="x"
-        style={{ left: currentDim.width, top: currentDim.height / 2 }}
+        position="east"
         onPointerDown={evt => {
           // capture the pointer
           evt.target.setPointerCapture(evt.pointerId);
@@ -118,10 +112,10 @@ const CanvasContainer = () => {
         onPointerCancel={handleEndResize}
         onPointerUp={handleEndResize}
         onPointerMove={handleResize}
+        of={canvasRef}
       />
       <Anchor
-        axis="y"
-        style={{ left: currentDim.width / 2, top: currentDim.height }}
+        position="south"
         onPointerDown={evt => {
           // capture the pointer
           evt.target.setPointerCapture(evt.pointerId);
@@ -131,10 +125,10 @@ const CanvasContainer = () => {
         onPointerCancel={handleEndResize}
         onPointerUp={handleEndResize}
         onPointerMove={handleResize}
+        of={canvasRef}
       />
       <Anchor
-        axis="xy"
-        style={{ left: currentDim.width, top: currentDim.height }}
+        position="southeast"
         onPointerDown={evt => {
           evt.target.setPointerCapture(evt.pointerId);
           dispatch({ type: "RESIZE_START_XY" });
@@ -142,29 +136,18 @@ const CanvasContainer = () => {
         onPointerCancel={handleEndResize}
         onPointerUp={handleEndResize}
         onPointerMove={handleResize}
+        of={canvasRef}
       />
       <ResizingOutline
         resizing={state.resizing !== "idle"}
-        style={{ width: desiredDim.width, height: desiredDim.height }}
+        style={{
+          left: 4,
+          top: 4,
+          width: desiredDim.width,
+          height: desiredDim.height
+        }}
       />
     </div>
-  );
-};
-
-const Anchor = ({ axis, style, ...props }) => {
-  return (
-    <div
-      style={{
-        position: "absolute",
-        border: "1px solid black",
-        width: 4,
-        height: 4,
-        background: "white",
-        cursor: axisToCursorMap[axis],
-        ...style
-      }}
-      {...props}
-    />
   );
 };
 
@@ -189,7 +172,7 @@ const styles = {
     background: "#6d6d6d",
     overflow: "auto",
     padding: 4,
-    boxSizing: 'border-box'
+    boxSizing: "border-box"
   },
   outline: {
     // the pointer events fall through
