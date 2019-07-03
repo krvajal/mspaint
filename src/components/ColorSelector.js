@@ -1,7 +1,6 @@
 import React from "react";
 
 const colors = {
-  items: 28,
   cssColors: [
     "Black",
     "DarkGrey",
@@ -37,7 +36,7 @@ const colors = {
 const ColorSelector = () => {
   let items = [];
 
-  for (let i = 0; i < colors.items; i++) {
+  for (let i = 0; i < colors.cssColors.length; i++) {
     let cssColor = {
       backgroundColor: colors.cssColors[i],
       width: 20,
