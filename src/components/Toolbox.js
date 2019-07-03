@@ -20,20 +20,21 @@ const Toolbox = props => {
 };
 
 const Tool = ({ icon, active, tooltip }) => {
-  return <div style={styles.tool}>{icon}</div>;
+  return <button style={styles.tool}>P</button>;
 };
 
 const styles = {
   toolbox: {
     display: "flex",
     flexWrap: "wrap",
-    width: 200,
-    border: "1px solid blak"
+    width: 50,
+    border: "1px solid black",
+    backgroundColor: "#EFE7D6",
+    padding: 4,
   },
   tool: {
-    width: 40,
-    height: 40,
-    border: "1px solid red"
+    width: 20,
+    height: 20,
   }
 };
 

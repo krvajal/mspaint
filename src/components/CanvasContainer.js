@@ -186,7 +186,10 @@ const styles = {
     position: "relative",
     width: "100%",
     height: "100%",
-    background: "#6d6d6d"
+    background: "#6d6d6d",
+    overflow: "auto",
+    padding: 4,
+    boxSizing: 'border-box'
   },
   outline: {
     // the pointer events fall through
