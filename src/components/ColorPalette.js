@@ -1,4 +1,5 @@
 import React from "react";
+import { useColorSelector } from "../providers/colors";
 
 const paletteColors = [
   "#000000",
@@ -8,7 +9,6 @@ const paletteColors = [
   "#018801",
   "#028282",
   "#01178B",
-
   "#861D87",
   "#83823D",
   "#063F4A",
@@ -33,10 +33,18 @@ const paletteColors = [
 ];
 
 const ColorPalette = () => {
+  const { setPrimaryColor } = useColorSelector();
+
   return (
     <div style={styles.palette}>
       {paletteColors.map(color => (
-        <ColorButton color={color} key={color} />
+        <ColorButton
+          color={color}
+          key={color}
+          onClick={() => {
+            setPrimaryColor(color);
+          }}
+        />
       ))}
     </div>
   );
@@ -44,11 +52,12 @@ const ColorPalette = () => {
 
 export default ColorPalette;
 
-const ColorButton = ({ color }) => {
+const ColorButton = ({ color, style, ...props }) => {
   return (
     <button
       type="button"
       style={{ ...styles.button, backgroundColor: color }}
+      {...props}
     />
   );
 };

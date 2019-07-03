@@ -1,5 +1,6 @@
 import React from "react";
 import { getRelativeCoordinates } from "../utils";
+import { useColors } from "../providers/colors";
 
 function canvasReducer(state, action) {
   switch (action.type) {
@@ -28,7 +29,7 @@ const Canvas = ({ width, height }) => {
   });
 
   const canvasRef = React.useRef();
-
+  const colors = useColors();
   const imageData = React.useRef();
   const { drawing } = state;
 
@@ -63,7 +64,7 @@ const Canvas = ({ width, height }) => {
     let ctx = getCtx();
 
     ctx.beginPath();
-    ctx.strokeStyle = "red";
+    ctx.strokeStyle = colors.primary;
     ctx.moveTo(x, y);
 
     dispatch({ type: "DRAW_START" });
