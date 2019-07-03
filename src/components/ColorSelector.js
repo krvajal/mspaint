@@ -34,7 +34,7 @@ const colors = {
   ]
 };
 
-const Colorbox = () => {
+const ColorSelector = () => {
   let items = [];
 
   for (let i = 0; i < colors.items; i++) {
@@ -59,4 +59,4 @@ const styles = {
   }
 };
 
-export default Colorbox;
+export default ColorSelector;
