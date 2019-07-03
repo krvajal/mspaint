@@ -43,10 +43,14 @@ const ColorSelector = () => {
       height: 20,
       border: "1px solid gray"
     };
-    items.push(<div key={i} style={cssColor} />);
+    items.push(<Color key={i} style={cssColor} />);
   }
 
   return <div style={styles.colorbox}>{items}</div>;
+};
+
+const Color = props => {
+  return <div key={props.key} style={props.style} />;
 };
 
 const styles = {
