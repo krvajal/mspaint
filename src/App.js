@@ -26,11 +26,17 @@ function App() {
             <CanvasContainer />
           </div>
         </div>
-        <div>
+        <Panel>
           <ColorPalette />
-        </div>
+        </Panel>
       </div>
     </ColorProvider>
+  );
+}
+
+function Panel({ children }) {
+  return (
+    <div style={{ width: "100%", backgroundColor: "#EFE7D6" }}>{children}</div>
   );
 }
 
